@@ -1,12 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_stepform/controller/steps_contoller.dart';
+import 'package:get/get.dart';
 
 class StepAcademic extends StatelessWidget {
+  final TextEditingController cardIdController;
+  final TextEditingController universityController;
+  final TextEditingController classController;
+
+  StepAcademic({
+    required this.cardIdController,
+    required this.universityController,
+    required this.classController,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
           TextFormField(
+            controller: cardIdController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -16,6 +31,7 @@ class StepAcademic extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextFormField(
+            controller: universityController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -25,6 +41,7 @@ class StepAcademic extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextFormField(
+            controller: classController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -47,17 +64,24 @@ class StepAcademic extends StatelessWidget {
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (String? value) {
-            },
+            onChanged: (String? value) {},
           ),
           SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              labelText: 'Picture',
-            ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Pick Image'),
+          ),
+          SizedBox(height: 10),
+          // Display selected image
+          GetBuilder<StepsController>(
+            builder: (controller) {
+              return controller.image.value != null
+                  ? Image.file(
+                      File(controller.image.value!.path),
+                      height: 100, // Adjust the height as needed
+                    )
+                  : SizedBox.shrink();
+            },
           ),
         ],
       ),

@@ -10,8 +10,11 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder<MyHomePageController>(
-        init: MyHomePageController(),
+      appBar: AppBar(
+        title: Center(child: Text('inscription d\'étudiant', style: TextStyle(fontWeight: FontWeight.bold),)),
+      ),
+      body: GetBuilder<StepsController>(
+        init: StepsController(),
         builder: (controller) {
           return Stepper(
             type: StepperType.horizontal,

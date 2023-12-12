@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stepform/controller/steps_contoller.dart';
 import 'package:get/get.dart';
 
 enum Gender { male, female }
@@ -7,10 +8,30 @@ enum IdentificationType { passport, identity }
 class StepInfo extends StatelessWidget {
   final Rx<Gender?> selectedGender = Gender.male.obs;
   final Rx<IdentificationType?> selectedIdentificationType = IdentificationType.passport.obs;
-  final TextEditingController identificationNumberController = TextEditingController();
+   final StepsController genderController = Get.put(StepsController());
+
+
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController addressController;
+  final TextEditingController birthDateController;
+  final TextEditingController emailController;
+  final TextEditingController phoneController;
+  final TextEditingController identificationNumberController;
+
+  StepInfo({
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.addressController,
+    required this.birthDateController,
+    required this.emailController,
+    required this.phoneController,
+    required this.identificationNumberController,
+  });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       child: Column(
         children: [
@@ -19,22 +40,24 @@ class StepInfo extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: firstNameController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    labelText: 'first name',
+                    labelText: 'First Name',
                   ),
                 ),
               ),
               SizedBox(width: 10),
               Expanded(
                 child: TextFormField(
+                  controller: lastNameController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    labelText: 'last name',
+                    labelText: 'Last Name',
                   ),
                 ),
               ),
@@ -42,11 +65,12 @@ class StepInfo extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextFormField(
+            controller: addressController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              labelText: 'adresse',
+              labelText: 'Address',
             ),
           ),
           SizedBox(height: 10),
@@ -54,66 +78,70 @@ class StepInfo extends StatelessWidget {
             onTap: () async {
               DateTime? selectedDate = await _selectDate(context);
               if (selectedDate != null) {
+                birthDateController.text = selectedDate.toString();
                 print('birth date: $selectedDate');
               }
             },
             child: IgnorePointer(
               child: TextFormField(
+                controller: birthDateController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  labelText: 'birth date',
+                  labelText: 'Birth Date',
                 ),
               ),
             ),
           ),
           SizedBox(height: 10),
-          Row(
-            children: [
-              Text('Gender: '),
-              Obx(() => Radio(
-                    value: Gender.male,
-                    groupValue: selectedGender.value,
-                    onChanged: (Gender? value) {
-                      selectedGender.value = value;
-                      print('Selected gender: $selectedGender');
-                    },
-                  )),
-              Text('Male'),
-              Obx(() => Radio(
-                    value: Gender.female,
-                    groupValue: selectedGender.value,
-                    onChanged: (Gender? value) {
-                      selectedGender.value = value;
-                      print('Selected gender: $selectedGender');
-                    },
-                  )),
-              Text('Female'),
-            ],
-          ),
+         Row(
+      children: [
+        Text('Gender: '),
+        Obx(() => Radio(
+              value: Gender.male,
+              groupValue: genderController.selectedGender.value,
+              onChanged: (Gender? value) {
+                genderController.setSelectedGender(value);
+                print('Selected gender: $value');
+              },
+            )),
+        Text('Male'),
+        Obx(() => Radio(
+              value: Gender.female,
+              groupValue: genderController.selectedGender.value,
+              onChanged: (Gender? value) {
+                genderController.setSelectedGender(value);
+                print('Selected gender: $value');
+              },
+            )),
+        Text('Female'),
+      ],
+    ),
           SizedBox(height: 30),
           TextFormField(
+            controller: emailController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              labelText: 'email',
+              labelText: 'Email',
             ),
           ),
           SizedBox(height: 10),
           TextFormField(
+            controller: phoneController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              labelText: 'phone',
+              labelText: 'Phone',
             ),
           ),
           SizedBox(height: 10),
           Row(
             children: [
-              Text('Identification Type: '),
+              Text('Identification: '),
               Obx(() => Radio(
                     value: IdentificationType.passport,
                     groupValue: selectedIdentificationType.value,
@@ -165,4 +193,6 @@ class StepInfo extends StatelessWidget {
 
     return selectedDate;
   }
+    
+
 }

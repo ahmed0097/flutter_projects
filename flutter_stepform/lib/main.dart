@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stepform/controller/steps_contoller.dart';
 import 'package:flutter_stepform/screens/steps.dart';
 import 'package:get/get.dart';
 
@@ -11,10 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    StepsController controller = StepsController();
+
     return GetMaterialApp(
-      
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: GetBuilder<StepsController>(
+        init: controller,
+        builder: (_) => MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
